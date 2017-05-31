@@ -1,8 +1,25 @@
-const server = require('socket.io')();
+const express = require('express');
+const app = express();
+const server = require('http').Server(app);
+const socket = require('socket.io')(server);
 const firstTodos = require('./data');
 const Todo = require('./todo');
+// import Todo from './todo';
+const public = `${__dirname}/root`;
+let count = 0;
 
-server.on('connection', (client) => {
+// socket.io connection
+app.get('/', (req, res) => {
+
+    // when someone goes to root, send index page
+    res.sendFile(`${public}/index.html`);
+
+});
+
+socket.on('connection', (client) => {
+
+    client.send(firstTodos);
+
     // This is going to be our fake 'database' for this application
     // Parse all default Todo's from db
 
@@ -10,16 +27,18 @@ server.on('connection', (client) => {
     // connections from the last time the server was run...
     const DB = firstTodos.map((t) => {
         // Form new Todo objects
-        return new Todo(title=t.title);
+        return new Todo(title = t.title);
     });
 
     // Sends a message to the client to reload all todos
     const reloadTodos = () => {
-        server.emit('load', DB);
+        console.log('something');
+        socket.emit('load', DB);
     }
 
-    // Accepts when a client makes a new todo
+    // // Accepts when a client makes a new todo
     client.on('make', (t) => {
+
         // Make a new todo
         const newTodo = new Todo(title=t.title);
 
@@ -33,7 +52,13 @@ server.on('connection', (client) => {
 
     // Send the DB downstream on connect
     reloadTodos();
+
+    socket.on('disconnect', () => {
+        console.log('user disconnected');
+    });
 });
+
+app.use(express.static(public));
 
 console.log('Waiting for clients to connect');
 server.listen(3003);
