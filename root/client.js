@@ -7,39 +7,69 @@ function add() {
 
     console.warn(event);
     const input = document.getElementById('todo-input');
+    console.log(JSON.parse(localStorage.getItem('data')));
+    const data = {
+        history: JSON.parse(localStorage.getItem('data')),
+        newItem: {
+            title : input.value
+        }
+    }
 
     // Emit the new todo as some data to the server
-    server.emit('make', {
-        title : input.value
-    });
+    server.emit('make', data);
 
     // Clear the input
     input.value = '';
     // TODO: refocus the element
 }
 
+// Clear list contents
+function clear() {
+    document.getElementById("todo-list").innerHTML = "";
+}
+
+// Render the available Todo object(s) as DOM elements
 function render(todo) {
 
-    console.log(todo);
+    // console.log(todo);
     const listItem = document.createElement('li');
     const listItemText = document.createTextNode(todo.title);
+    const listDeleteBtn = document.createElement('button');
+    const listItemCheck = document.createElement('input');
+    listDeleteBtn.innerHTML = 'x';
+    listItemCheck.type = 'checkbox';
 
+    listItem.appendChild(listDeleteBtn);
     listItem.appendChild(listItemText);
     list.append(listItem);
+    listItem.appendChild(listItemCheck);
 
 }
 
-// This event will list the available socket connections
-server.on('message', (data) => {
+// Delete element of deleted Todo
+function delete() {
 
-    localStorage.setItem("data", JSON.stringify(data));
-    // document.write(data);
-
-});
+}
 
 // NOTE: These are listeners for events from the server
 // This event is for (re)loading the entire list of todos from the server
 server.on('load', (todos) => {
-    console.log(todos);
-    todos.forEach((todo) => render(todo));
+
+    if (localStorage.getItem('data')) {
+        clear();
+        console.log(localStorage.getItem("data"));
+
+        const history = JSON.parse(localStorage.getItem('data'));
+        history.forEach((todo) => render(todo));
+    } else {
+        todos.forEach((todo) => render(todo));
+    }
+});
+
+server.on('add', (data) => {
+
+    localStorage.setItem("data", JSON.stringify(data.history));
+    console.log(localStorage.getItem("data"));
+    render(data.newItem);
+
 });
