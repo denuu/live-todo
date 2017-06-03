@@ -5,14 +5,30 @@
         <meta charset="utf-8">
         <title>TODO</title>
         <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+        <link rel="stylesheet" href="app.css" />
     </head>
 
     <body>
         <input id="todo-input" type="text" placeholder="Feed the cat" autofocus>
-        <button type="button" onclick="add()">Make</button>
+        <button id="make" type="button" onclick="add()">Make</button>
+        <button id="completeAll" type="button" onclick="completeAll()">Complete All</button>
+        <button id="deleteAll" type="button" onclick="deleteAll()">Delete All</button>
         <ul id="todo-list"></ul>
     </body>
 
     <script src="client.js" async></script>
-    
+
+    <script>
+
+        // Let the <enter> key trigger add() as well
+        document.getElementById("todo-input")
+            .addEventListener("keyup", function(event) {
+            event.preventDefault();
+            if (event.keyCode == 13) {
+                document.getElementById("make").click();
+            }
+        });
+
+    </script>
+
 </html>

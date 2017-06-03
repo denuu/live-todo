@@ -1,11 +1,14 @@
 [
     {
-        "title" : "Order more coffee"
+        "title" : "Order more coffee",
+        "done": false
     },
     {
-        "title" : "Clean the coffee machine"
+        "title" : "Clean the coffee machine",
+        "done": false
     },
     {
-        "title" : "Sweep the floor"
+        "title" : "Sweep the floor",
+        "done": false
     }
 ]

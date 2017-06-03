@@ -42,15 +42,34 @@ socket.on('connection', (client) => {
         socket.emit('add', data);
     }
 
+    // Sends a message to the client to reload all todos
+    const deleteTodos = (t) => {
+        const data = {
+            history: DB,
+            deleteItem: t
+        }
+        socket.emit('deleted', data);
+    }
+
+    // Sends a message to the client to reload all todos
+    const completeTodos = (t) => {
+        const data = {
+            history: DB,
+            completeItem: t
+        }
+        socket.emit('completed', data);
+    }
+
     // Accepts when a client makes a new todo
     client.on('make', (t) => {
 
         // Make a new todo
         const newTodo = new Todo(title = t.newItem.title);
+
         if (t.history) {
-            console.log(t.history);
             DB = t.history;
         }
+
         // Push this newly created todo to our database
         DB.push(newTodo);
 
@@ -60,15 +79,54 @@ socket.on('connection', (client) => {
 
     });
 
+    client.on('delete', (d) => {
+        const index = d.deleteItem;
+
+        if (d.history) {
+            DB = d.history;
+        }
+
+        DB.splice(index, 1);
+
+        deleteTodos(index);
+    });
+
+    client.on('deleteAll', (d) => {
+        DB = d;
+        socket.emit('deletedAll', DB);
+    });
+
+    client.on('complete', (d) => {
+        const index = d.completeItem;
+
+        if (d.history) {
+            DB = d.history;
+        }
+        const todo = new Todo(DB[index].title);
+        DB[index] = todo.completed();
+
+        completeTodos(index);
+    });
+
+    client.on('completeAll', (d) => {
+
+        let result = [];
+        d.forEach((todo, index) => {
+            const newTodo = new Todo(todo.title);
+            result.push(newTodo.completed());
+        });
+        DB = result;
+        socket.emit('completedAll', DB);
+
+    });
+
     // Send the DB downstream on connect
     reloadTodos();
 
     socket.on('disconnect', () => {
-        console.log('user disconnected');
     });
 });
 
 app.use(express.static(public));
 
-console.log('Waiting for clients to connect');
 server.listen(3003);
