@@ -1,3 +1,268 @@
-.completed{
-    color: red;
+/*
+ █████  ██████  ██████      ███████ ████████ ██    ██ ██      ███████ ███████
+██   ██ ██   ██ ██   ██     ██         ██     ██  ██  ██      ██      ██
+███████ ██████  ██████      ███████    ██      ████   ██      █████   ███████
+██   ██ ██      ██               ██    ██       ██    ██      ██           ██
+██   ██ ██      ██          ███████    ██       ██    ███████ ███████ ███████
+*/
+
+html, body {
+    padding: 0;
+    margin: 0;
+    background: #F8F8F8;
+    background: -webkit-linear-gradient(left top, #ffffff, #F8F8F8);
+    font-family: 'Montserrat', sans-serif;
+}
+
+h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2em;
+    font-weight: 700;
+    padding: 0;
+    margin: 2px;
+}
+
+h4 {
+    font-size: 0.9em;
+    color: grey;
+    font-weight: 500;
+    padding: 0;
+    margin: 2px;
+}
+
+.vertical-align {
+    position: relative;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    vertical-align: top;
+}
+
+/*
+████████ ██ ████████ ██      ███████     ██████   █████  ██████
+   ██    ██    ██    ██      ██          ██   ██ ██   ██ ██   ██
+   ██    ██    ██    ██      █████       ██████  ███████ ██████
+   ██    ██    ██    ██      ██          ██   ██ ██   ██ ██   ██
+   ██    ██    ██    ███████ ███████     ██████  ██   ██ ██   ██
+*/
+
+#title-bar {
+    width: 100vw;
+    height: 50px;
+    padding: 1em;
+}
+
+
+/*
+ █████  ██████  ██████      ██████   █████  ██████
+██   ██ ██   ██ ██   ██     ██   ██ ██   ██ ██   ██
+███████ ██████  ██████      ██████  ███████ ██████
+██   ██ ██      ██          ██   ██ ██   ██ ██   ██
+██   ██ ██      ██          ██████  ██   ██ ██   ██
+*/
+
+#app-bar {
+    position: fixed;
+    bottom: 0;
+    width: 100vw;
+    height: 70px;
+    background: #ffffff;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#todo-input {
+    height: 50px;
+    width: calc(70vw - 2em);
+    font-size: 1em;
+    font-weight: 500;
+    background: #F8F8F8;
+    border: 1px solid #ffffff;
+    border-radius: 4px;
+    padding: 0 10px 0 10px;
+}
+
+#todo-input:focus{
+    outline: none;
+    border: 1px solid #24D3EB;
+}
+
+#make {
+    background: #24D3EB;
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    font-size: 1.5em;
+    color: white;
+    border: none;
+    box-shadow: rgba(0, 0, 0, 0.4) 0 2px 5px 0px;
+    cursor: pointer;
+}
+
+.plus{
+    width: 70%;
+    margin-top: 6px;
+    margin-left: 1px;
+}
+
+#make:hover{
+    box-shadow: rgba(0, 0, 0, 0.2) 0 2px 5px 0px;
+    transition: box-shadow 0.3s ease;
+}
+
+/*
+████████  ██████  ██████   ██████      ██      ██ ███████ ████████
+   ██    ██    ██ ██   ██ ██    ██     ██      ██ ██         ██
+   ██    ██    ██ ██   ██ ██    ██     ██      ██ ███████    ██
+   ██    ██    ██ ██   ██ ██    ██     ██      ██      ██    ██
+   ██     ██████  ██████   ██████      ███████ ██ ███████    ██
+*/
+
+.todo-container{
+    position: relative;
+    width: calc(75vw - 2em);
+    top: 1.5em;
+    margin-bottom: 100px;
+}
+
+#todo-list {
+    /*text-align: center;*/
+    margin-left: calc(25vw - 2em);
+    list-style: none;
+    border: 0;
+    padding: 0;
+}
+
+@media (max-width: 599px) {
+
+    .todo-container {
+        width: calc(100vw - 2em);
+    }
+
+    #todo-list {
+        margin-left: 0;
+    }
+
+}
+
+#todo-list li {
+    margin: 1em;
+    padding: 1em;
+    height: 50px;
+    width: calc(100% - 2em);
+    background: white;
+    box-shadow: grey 0 1px 5px -1px;
+}
+
+#todo-list p {
+    display: inline-block;
+    font-size: 1em;
+}
+
+.text-buttons {
+    width: calc(100vw - 2em);
+    text-align: center;
+}
+
+.text-btn {
+    border: 0;
+    height: 30px;
+    display: inline-block;
+    background: none;
+    color: black;
+    text-align: center;
+    border-bottom: 2px #FEBE2D solid;
+    color: grey;
+    margin: 0 1em 0 1em;
+    font-size: 0.8em;
+    cursor: pointer;
+}
+
+.text-btn:hover {
+    color: #FEBE2D;
+    transition: color 0.3s ease;
+}
+
+.btn {
+    width: 30px;
+    border: 0;
+    height: 30px;
+    outline: none;
+    display: inline-block;
+}
+.btn:hover{
+    cursor: pointer;
+}
+
+.btn-check {
+    background: white;
+    color: grey;
+    border: 3px grey solid;
+    border-radius: 15px;
+    margin-left: 1em;
+    margin-right: 1em;
+}
+.btn-check:hover{
+    transition: border 0.3s ease;
+    border: 3px #24D3EB solid;
+
+}
+.check{
+    width: 100%;
+    /*opacity: 0;*/
+    margin-top: 3px;
+}
+
+.btn-check:hover .check{
+    /*opacity: 100;*/
+    transition: filter 0.3s ease;
+    filter: invert(50%);
+}
+
+.btn-delete {
+    background: transparent;
+    color: grey;
+    border: none;
+    margin-left: 1em;
+    margin-right: 1em;
+    position: absolute;
+    right: 0;
+    /*top: 50%;*/
+}
+
+.delete{
+    width: 100%;
+    filter: grayscale(100%);
+    margin-top: 13px;
+}
+
+.btn-delete:hover .delete{
+    transition: filter 0.3s ease;
+    filter: grayscale(0%);
+}
+
+/*
+███████ ████████  █████  ████████ ███████ ███████
+██         ██    ██   ██    ██    ██      ██
+███████    ██    ███████    ██    █████   ███████
+     ██    ██    ██   ██    ██    ██           ██
+███████    ██    ██   ██    ██    ███████ ███████
+*/
+
+.completed {
+    background: #E6FFE5 !important;
+}
+
+.completed .btn-check {
+    background: #24D3EB;
+    border: 3px #24D3EB solid;
+    color: white;
+}
+.completed .check {
+    opacity: 100;
+}
+.completed:hover .check {
+    filter: invert(0%) !important;
 }

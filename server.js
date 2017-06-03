@@ -19,7 +19,6 @@ app.get('/', (req, res) => {
 
 // SOCKET CONNECTION
 socket.on('connection', (client) => {
-    // client.send(firstTodos);
 
     // FIXME: DB is reloading on client refresh. It should be persistent on new client
     // connections from the last time the server was run...
@@ -124,7 +123,9 @@ socket.on('connection', (client) => {
     reloadTodos();
 
     socket.on('disconnect', () => {
+        
     });
+
 });
 
 app.use(express.static(public));

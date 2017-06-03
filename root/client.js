@@ -70,12 +70,16 @@ function render(todo, index) {
 
     // Todo DOM element pieces
     const listItem = document.createElement('li');
+    const listItemP = document.createElement('p');
     const listItemText = document.createTextNode(todo.title);
     const listDeleteBtn = document.createElement('button');
     const listDoneBtn = document.createElement('button');
+
     listItem.setAttribute("data-index", index);
-    listDeleteBtn.innerHTML = 'x';
-    listDoneBtn.innerHTML = '√';
+    listDoneBtn.innerHTML = '<img src="img/005-mark.svg" class="check"/>';
+    listDoneBtn.className = "btn btn-check";
+    listDeleteBtn.innerHTML = '<img src="img/multiplication-sign.svg" class="delete"/>';
+    listDeleteBtn.className = "btn btn-delete";
     listItem.setAttribute('value', todo.title);
 
     if (todo.complete) {
@@ -93,10 +97,11 @@ function render(todo, index) {
     };
 
     // Build the Todo DOM element
-    listItem.appendChild(listDeleteBtn);
-    listItem.appendChild(listItemText);
-    list.append(listItem);
     listItem.appendChild(listDoneBtn);
+    listItem.appendChild(listItemP);
+    listItemP.appendChild(listItemText);
+    list.append(listItem);
+    listItem.appendChild(listDeleteBtn);
 
 }
 
