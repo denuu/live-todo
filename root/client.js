@@ -34,55 +34,18 @@ function add() {
 
 }
 
-// Function to delete an existing todo
-function deleteItem(index) {
+// Function to delete, complete, or uncomplete and item
+function modifyItem(index, action) {
 
-    // Grab data from the existing DB of todos
+    // Get DB data
     const history = JSON.parse(localStorage.getItem('data'));
     const data = {
         history: history,
-        deleteItem: index
+        index: index
     }
 
-    // Emit the index and history of the deleted todo
-    server.emit('delete', data);
-
-}
-
-// Function to delete all existing todos
-function deleteAll() {
-
-    // Simply tell the server to reset our database of todos
-    server.emit('deleteAll', []);
-
-}
-
-// Function to mark a Todo as completed
-function completeItem(index) {
-
-    // Get data from existing DB of todos
-    const history = JSON.parse(localStorage.getItem('data'));
-    const data = {
-        history: history,
-        completeItem: index
-    }
-    // Emit the index and history of the deleted todo
-    server.emit('complete', data);
-
-}
-
-// Function to mark completed item as not complete
-function uncompleteItem(index) {
-
-    // Get data from existing DB
-    const history = JSON.parse(localStorage.getItem('data'));
-    const data = {
-        history: history,
-        uncompleteItem: index
-    }
-
-    // Emit DB and index to mark correct todo as not complete
-    server.emit('uncomplete', data);
+    // Emit action and index
+    server.emit(action, data);
 
 }
 
@@ -97,9 +60,20 @@ function completeAll() {
 
 }
 
+// Function to delete all existing todos
+function deleteAll() {
+
+    // Simply tell the server to reset our database of todos
+    server.emit('deleteAll', []);
+
+}
+
 // Function to clear list contents
 function clear() {
+
+    // Remove all elements within the todo-list
     document.getElementById("todo-list").innerHTML = "";
+
 }
 
 // Render the available Todo object(s) as DOM elements
@@ -121,7 +95,7 @@ function render(todo, index) {
     listDeleteBtn.className = "btn btn-delete";
     listItem.setAttribute('value', todo.title);
     listDeleteBtn.onclick = function() {
-        deleteItem(index);
+        modifyItem(index, 'delete');
     };
 
     // If a Todo is completed...
@@ -130,14 +104,14 @@ function render(todo, index) {
         // ... clicking checkbox uncompletes it
         listItem.className = "completed";
         listDoneBtn.onclick = function() {
-            uncompleteItem(index);
+            modifyItem(index, 'uncomplete');
         };
 
     } else {
 
         // ... clicking checkbox completes it
         listDoneBtn.onclick = function() {
-            completeItem(index);
+            modifyItem(index, 'complete');
         };
 
     }
@@ -192,6 +166,20 @@ server.on('load', (todos) => {
 
 });
 
+// Event for deleted, completed, or uncompleted todo
+server.on('modified', (data) => {
+
+    // Load Todos from DB
+    localStorage.setItem("data", JSON.stringify(data.history));
+
+    // Clear the list
+    clear();
+
+    // Render Todos
+    data.history.forEach((todo, index) => render(todo, index));
+
+});
+
 // Event for adding a new todo to the "DB" and rendering it
 server.on('add', (data) => {
 
@@ -199,19 +187,7 @@ server.on('add', (data) => {
     localStorage.setItem("data", JSON.stringify(data.history));
 
     // Render new as DOM element
-    render(data.newItem, data.history.length-1);
-
-});
-
-// Event for deleting an existing todo
-server.on('deleted', (data) => {
-
-    // Update our DB with removed todo
-    localStorage.setItem("data", JSON.stringify(data.history));
-
-    // Clear and render updated Todos
-    clear();
-    data.history.forEach((todo, index) => render(todo, index));
+    render(data.newItem, data.history.length - 1);
 
 });
 
@@ -223,30 +199,6 @@ server.on('deletedAll', (data) => {
 
     // Clear the list
     clear();
-
-});
-
-// Event for when server emits completed todo
-server.on('completed', (data) => {
-
-    // Update DB with newly completed todo
-    localStorage.setItem("data", JSON.stringify(data.history));
-
-    // Clear list and render updated Todo list
-    clear();
-    data.history.forEach((todo, index) => render(todo, index));
-
-});
-
-// Event for when server emits uncomplete on complete todo
-server.on('uncompleted', (data) => {
-
-    // Update DB with updated todo list
-    localStorage.setItem("data", JSON.stringify(data.history));
-
-    // Clear list and render todo list
-    clear();
-    data.history.forEach((todo, index) => render(todo, index));
 
 });
 
