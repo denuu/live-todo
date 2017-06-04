@@ -1,7 +1,7 @@
 {
   "name": "challenge",
   "version": "1.0.0",
-  "description": "",
+  "description": "Multi-user live to-do list. A socket.io project.",
   "main": "index.js",
   "scripts": {
     "test": "npm test",

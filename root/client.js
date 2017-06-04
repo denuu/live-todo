@@ -1,3 +1,12 @@
+/**
+* Todo
+*
+* Multi-user live to-do list.
+* A socket.io project.
+*
+* Denis Nossevitch - 2017
+*/
+
 const server = io('http://localhost:3003/');
 const list = document.getElementById('todo-list');
 
@@ -22,45 +31,73 @@ function add() {
 
     // Clear the input
     input.value = '';
-    // TODO: refocus the element
+
 }
 
+// Function to delete an existing todo
 function deleteItem(index) {
+
+    // Grab data from the existing DB of todos
     const history = JSON.parse(localStorage.getItem('data'));
-    // history.splice(index, 1);
     const data = {
         history: history,
         deleteItem: index
     }
+
     // Emit the index and history of the deleted todo
     server.emit('delete', data);
+
 }
 
+// Function to delete all existing todos
 function deleteAll() {
+
+    // Simply tell the server to reset our database of todos
     server.emit('deleteAll', []);
+
 }
 
-// Mark a Todo as completed
+// Function to mark a Todo as completed
 function completeItem(index) {
-    const history = JSON.parse(localStorage.getItem('data'));
 
+    // Get data from existing DB of todos
+    const history = JSON.parse(localStorage.getItem('data'));
     const data = {
         history: history,
         completeItem: index
     }
     // Emit the index and history of the deleted todo
     server.emit('complete', data);
+
 }
 
+// Function to mark completed item as not complete
+function uncompleteItem(index) {
+
+    // Get data from existing DB
+    const history = JSON.parse(localStorage.getItem('data'));
+    const data = {
+        history: history,
+        uncompleteItem: index
+    }
+
+    // Emit DB and index to mark correct todo as not complete
+    server.emit('uncomplete', data);
+
+}
+
+// Function to mark all existing todos as complete
 function completeAll() {
 
+    // Get DB data
     const history = JSON.parse(localStorage.getItem('data'));
 
+    // Emit DB to server to mark all as complete
     server.emit('completeAll', history);
 
 }
 
-// Clear list contents
+// Function to clear list contents
 function clear() {
     document.getElementById("todo-list").innerHTML = "";
 }
@@ -74,27 +111,36 @@ function render(todo, index) {
     const listItemText = document.createTextNode(todo.title);
     const listDeleteBtn = document.createElement('button');
     const listDoneBtn = document.createElement('button');
+    const toast = document.getElementById("user-toaster");
 
+    // Combine and add attributes to the pieces
     listItem.setAttribute("data-index", index);
     listDoneBtn.innerHTML = '<img src="img/005-mark.svg" class="check"/>';
     listDoneBtn.className = "btn btn-check";
     listDeleteBtn.innerHTML = '<img src="img/multiplication-sign.svg" class="delete"/>';
     listDeleteBtn.className = "btn btn-delete";
     listItem.setAttribute('value', todo.title);
-
-    if (todo.complete) {
-        listItem.className = "completed";
-    }
-
-    // Give the pieces onClick actions
     listDeleteBtn.onclick = function() {
         deleteItem(index);
     };
 
-    // Give the pieces onClick actions
-    listDoneBtn.onclick = function() {
-        completeItem(index);
-    };
+    // If a Todo is completed...
+    if (todo.complete) {
+
+        // ... clicking checkbox uncompletes it
+        listItem.className = "completed";
+        listDoneBtn.onclick = function() {
+            uncompleteItem(index);
+        };
+
+    } else {
+
+        // ... clicking checkbox completes it
+        listDoneBtn.onclick = function() {
+            completeItem(index);
+        };
+
+    }
 
     // Build the Todo DOM element
     listItem.appendChild(listDoneBtn);
@@ -102,6 +148,25 @@ function render(todo, index) {
     listItemP.appendChild(listItemText);
     list.append(listItem);
     listItem.appendChild(listDeleteBtn);
+
+}
+
+// Function to visualize number of active users, and notify of new connected user
+function renderUsers (data) {
+
+    const u = document.getElementById("user-number");
+    const toast = document.getElementById("user-toaster");
+
+    // Update count of connected users
+    u.innerHTML = data.count;
+
+    // If new user connects, show a toaster notification
+    if (data.event == 'connected') {
+        toast.className = 'notify';
+        window.setTimeout( () => {
+            toast.removeAttribute("class");
+        }, 2500);
+    }
 
 }
 
@@ -118,57 +183,89 @@ server.on('load', (todos) => {
         history.forEach((todo, index) => render(todo, index));
 
     } else {
-        clear();
 
-        // FIXME If 2 browsers clear storage, refresh one and second will have 2 sets of default Todos
         // If no localStorage data exists, load default Todos as DOM elements
+        clear();
         todos.forEach((todo, index) => render(todo, index));
 
     }
+
 });
 
+// Event for adding a new todo to the "DB" and rendering it
 server.on('add', (data) => {
 
-    // Add the new Todo to our DB history, and render new as DOM element
+    // Add the new Todo to our DB history
     localStorage.setItem("data", JSON.stringify(data.history));
+
+    // Render new as DOM element
     render(data.newItem, data.history.length-1);
 
 });
 
+// Event for deleting an existing todo
 server.on('deleted', (data) => {
 
-    // Add the new Todo to our DB history, and render new as DOM element
+    // Update our DB with removed todo
     localStorage.setItem("data", JSON.stringify(data.history));
+
+    // Clear and render updated Todos
     clear();
     data.history.forEach((todo, index) => render(todo, index));
 
 });
 
-// Server emitted deleteAll, clear stored DB and DOM list
+// Event for when server emits delete all todos, clear stored DB and DOM list
 server.on('deletedAll', (data) => {
 
+    // Update our DB with empty array
     localStorage.setItem('data', JSON.stringify(data));
+
+    // Clear the list
     clear();
 
 });
 
+// Event for when server emits completed todo
 server.on('completed', (data) => {
 
-    // Add the new Todo to our DB history, and render new as DOM element
+    // Update DB with newly completed todo
     localStorage.setItem("data", JSON.stringify(data.history));
+
+    // Clear list and render updated Todo list
     clear();
     data.history.forEach((todo, index) => render(todo, index));
 
 });
 
+// Event for when server emits uncomplete on complete todo
+server.on('uncompleted', (data) => {
+
+    // Update DB with updated todo list
+    localStorage.setItem("data", JSON.stringify(data.history));
+
+    // Clear list and render todo list
+    clear();
+    data.history.forEach((todo, index) => render(todo, index));
+
+});
+
+// Event for when server emits complete all todos
 server.on('completedAll', (data) => {
 
+    // Update DB
     localStorage.setItem('data', JSON.stringify(data));
 
-    // Clear the DOM list
+    // Clear list and render updated todos
     clear();
-
-    // Render each Todo
     data.forEach((todo, index) => render(todo, index));
+
+});
+
+// Event for when server emits connected user update
+server.on('updateUsers', (data) => {
+
+    // Render updated users with count
+    renderUsers(data);
 
 });

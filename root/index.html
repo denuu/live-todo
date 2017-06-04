@@ -14,6 +14,12 @@
         <div id="title-bar">
             <h1>Todo</h1>
             <h4>Multi-user live to-do list. A socket.io project.</h4>
+            <span id='user-count'>
+                <p>
+                    <img src="img/user.svg" class="user-icon"/>
+                </p>
+                <p id="user-number"></p>
+            </span>
         </div>
 
         <div class="todo-container">
@@ -29,6 +35,10 @@
             <button id="make" class="vertical-align" type="button" onclick="add()">
                 <img src="img/plus.svg" class="plus"/>
             </button>
+        </div>
+
+        <div id="user-toaster">
+            <p>A user connected</p>
         </div>
 
     </body>

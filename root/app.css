@@ -12,10 +12,11 @@ html, body {
     background: #F8F8F8;
     background: -webkit-linear-gradient(left top, #ffffff, #F8F8F8);
     font-family: 'Montserrat', sans-serif;
+    overflow-x: hidden;
+    height: 100%;
 }
 
 h1 {
-    font-family: 'Montserrat', sans-serif;
     font-size: 2em;
     font-weight: 700;
     padding: 0;
@@ -54,6 +55,22 @@ h4 {
     padding: 1em;
 }
 
+#user-count {
+    color: grey;
+    position: fixed;
+    top: 0.5em;
+    right: 1em;
+}
+
+#user-count p {
+    font-size: 1em;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.user-icon {
+    width: 1em;
+}
 
 /*
  █████  ██████  ██████      ██████   █████  ██████
@@ -71,6 +88,7 @@ h4 {
     background: #ffffff;
     text-align: center;
     vertical-align: middle;
+    box-shadow: rgba(0,0,0,0.5) 0 -3px 5px -4px;
 }
 
 #todo-input {
@@ -84,32 +102,63 @@ h4 {
     padding: 0 10px 0 10px;
 }
 
-#todo-input:focus{
+#todo-input:focus {
     outline: none;
     border: 1px solid #24D3EB;
 }
 
 #make {
     background: #24D3EB;
-    width: 40px;
-    height: 40px;
-    border-radius: 20px;
-    font-size: 1.5em;
+    width: 50px;
+    height: 50px;
+    border-radius: 3px;
+    font-size: 1.2em;
     color: white;
     border: none;
-    box-shadow: rgba(0, 0, 0, 0.4) 0 2px 5px 0px;
     cursor: pointer;
 }
 
-.plus{
-    width: 70%;
+#make:hover {
+    background: #FEBE2D;
+    transition: background 0.3s ease;
+}
+
+#make:focus {
+    outline: none;
+}
+
+.plus {
+    width: 50%;
     margin-top: 6px;
     margin-left: 1px;
 }
 
-#make:hover{
-    box-shadow: rgba(0, 0, 0, 0.2) 0 2px 5px 0px;
-    transition: box-shadow 0.3s ease;
+#user-toaster {
+    background: #24D3EB;
+    color: #ffffff;
+    border-radius: 3px;
+    padding: 0.5em;
+    position: absolute;
+    top: 1em;
+    right: -11em;
+}
+
+.notify {
+    /*right: 0;*/
+    /*transition: right 0.5s ease-in;*/
+    animation: slide 0.5s forwards;
+}
+
+@-webkit-keyframes slide {
+    100% {
+        right: 1em;
+    }
+}
+
+@keyframes slide {
+    100% {
+        right: 1em;
+    }
 }
 
 /*
@@ -120,11 +169,12 @@ h4 {
    ██     ██████  ██████   ██████      ███████ ██ ███████    ██
 */
 
-.todo-container{
+.todo-container {
     position: relative;
     width: calc(75vw - 2em);
     top: 1.5em;
     margin-bottom: 100px;
+    height: 100%;
 }
 
 #todo-list {
@@ -154,6 +204,7 @@ h4 {
     width: calc(100% - 2em);
     background: white;
     box-shadow: grey 0 1px 5px -1px;
+    border-radius: 3px;
 }
 
 #todo-list p {
@@ -204,19 +255,18 @@ h4 {
     margin-left: 1em;
     margin-right: 1em;
 }
-.btn-check:hover{
+.btn-check:hover {
     transition: border 0.3s ease;
     border: 3px #24D3EB solid;
-
 }
-.check{
+
+.check {
     width: 100%;
     /*opacity: 0;*/
     margin-top: 3px;
 }
 
-.btn-check:hover .check{
-    /*opacity: 100;*/
+.btn-check:hover .check {
     transition: filter 0.3s ease;
     filter: invert(50%);
 }
@@ -232,13 +282,13 @@ h4 {
     /*top: 50%;*/
 }
 
-.delete{
+.delete {
     width: 100%;
     filter: grayscale(100%);
     margin-top: 13px;
 }
 
-.btn-delete:hover .delete{
+.btn-delete:hover .delete {
     transition: filter 0.3s ease;
     filter: grayscale(0%);
 }
@@ -260,9 +310,11 @@ h4 {
     border: 3px #24D3EB solid;
     color: white;
 }
+
 .completed .check {
     opacity: 100;
 }
+
 .completed:hover .check {
     filter: invert(0%) !important;
 }
