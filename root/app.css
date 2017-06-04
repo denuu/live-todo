@@ -182,7 +182,7 @@ h4 {
     margin-left: calc(25vw - 2em);
     list-style: none;
     border: 0;
-    padding: 0;
+    padding: 0 0 100px 0;
 }
 
 @media (max-width: 599px) {

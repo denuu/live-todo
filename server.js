@@ -54,6 +54,18 @@ socket.on('connection', (client) => {
         socket.emit('load', DB);
     }
 
+    // deleteTodos, completeTodos, uncompleteTodos,
+    const modifyTodos = (t) => {
+
+        const data = {
+            history: DB,
+            index: t
+        }
+
+        socket.emit('modified', data);
+
+    }
+
     // Sends a message to the client to add new todos
     const addTodos = (t) => {
         const data = {
@@ -61,33 +73,6 @@ socket.on('connection', (client) => {
             newItem: t
         }
         socket.emit('add', data);
-    }
-
-    // Sends a message to the client to delete a todo
-    const deleteTodos = (t) => {
-        const data = {
-            history: DB,
-            deleteItem: t
-        }
-        socket.emit('deleted', data);
-    }
-
-    // Sends a message to the client to mark a todo as completed
-    const completeTodos = (t) => {
-        const data = {
-            history: DB,
-            completeItem: t
-        }
-        socket.emit('completed', data);
-    }
-
-    // Sends a message to the client to mark a completed todo as not completed
-    const uncompleteTodos = (t) => {
-        const data = {
-            history: DB,
-            uncompleteItem: t
-        }
-        socket.emit('uncompleted', data);
     }
 
     // Accepts when a client makes a new todo
@@ -113,7 +98,7 @@ socket.on('connection', (client) => {
     client.on('delete', (d) => {
 
         // Determine which todo to delete
-        const index = d.deleteItem;
+        const index = d.index;
 
         // If stored "DB" exists (anything but initial Todos) - use it
         if (d.history) {
@@ -124,7 +109,8 @@ socket.on('connection', (client) => {
         DB.splice(index, 1);
 
         // Send deleted todo index to client
-        deleteTodos(index);
+        // deleteTodos(index);
+        modifyTodos(index);
 
     });
 
@@ -143,7 +129,7 @@ socket.on('connection', (client) => {
     client.on('complete', (d) => {
 
         // Determing which todo to complete
-        const index = d.completeItem;
+        const index = d.index;
 
         // If stored "DB" exists - use it
         if (d.history) {
@@ -155,7 +141,7 @@ socket.on('connection', (client) => {
         DB[index] = todo.completed();
 
         // Send compelted todo index to client
-        completeTodos(index);
+        modifyTodos(index);
 
     });
 
@@ -163,7 +149,7 @@ socket.on('connection', (client) => {
     client.on('uncomplete', (d) => {
 
         // Determine which todo to uncomplete
-        const index = d.uncompleteItem;
+        const index = d.index;
 
         // If stored "DB" exists - use it
         if (d.history) {
@@ -175,7 +161,7 @@ socket.on('connection', (client) => {
         DB[index] = todo.uncompleted();
 
         // Send uncompleted todo index to client
-        uncompleteTodos(index);
+        modifyTodos(index);
 
     });
 
