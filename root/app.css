@@ -236,6 +236,10 @@ h4 {
     transition: color 0.3s ease;
 }
 
+.text-btn:focus {
+    outline: none;
+}
+
 .btn {
     width: 30px;
     border: 0;
