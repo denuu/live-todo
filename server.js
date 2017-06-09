@@ -14,7 +14,6 @@ const socket = require('socket.io')(server);
 const firstTodos = require('./data');
 const Todo = require('./todo');
 const public = `${__dirname}/root`;
-const Cookies = require('js-cookie');
 let count = 0;
 
 // socket.io connection
@@ -197,5 +196,4 @@ socket.on('connection', (client) => {
 
 app.use(express.static(public));
 
-console.log('Waiting for clients to connect');
 server.listen(3003);

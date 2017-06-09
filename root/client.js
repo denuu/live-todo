@@ -16,18 +16,20 @@ const list = document.getElementById('todo-list');
 function add() {
 
     // Grab submitted input value and store it in our localStorage 'DB'
-    console.warn(event);
     const input = document.getElementById('todo-input');
-    const data = {
-        history: JSON.parse(localStorage.getItem('data')),
-        newItem: {
-            title : input.value,
-            done: false
-        }
-    }
 
-    // Emit the new todo as some data to the server
-    server.emit('make', data);
+    if (input.value.trim()) {
+        const data = {
+            history: JSON.parse(localStorage.getItem('data')),
+            newItem: {
+                title : input.value,
+                done: false
+            }
+        }
+
+        // Emit the new todo as some data to the server
+        server.emit('make', data);
+    }
 
     // Clear the input
     input.value = '';
