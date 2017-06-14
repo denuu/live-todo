@@ -173,8 +173,7 @@ h4 {
     position: relative;
     width: calc(75vw - 2em);
     top: 1.5em;
-    margin-bottom: 100px;
-    height: 100%;
+    margin-bottom: 25px;
 }
 
 #todo-list {

@@ -74,6 +74,40 @@ socket.on('connection', (client) => {
         socket.emit('add', data);
     }
 
+    // This function modifies
+    function changeState(d, action) {
+
+        // Determine which todo to modify
+        const index = d.index;
+
+        // Use stored DB if exists
+        if (d.history) {
+            DB = d.history;
+        }
+
+        if (action == 'delete') {
+
+            // Remove the specified todo
+            DB.splice(index, 1);
+
+        } else {
+
+            // Create a new todo
+            const todo = new Todo(DB[index].title);
+
+            // Set state
+            if (action == 'complete') {
+                DB[index] = todo.completed();
+            } else if (action == 'uncomplete') {
+                DB[index] = todo.uncompleted();
+            }
+
+        }
+
+        modifyTodos(index);
+
+    }
+
     // Accepts when a client makes a new todo
     client.on('make', (t) => {
 
@@ -96,20 +130,7 @@ socket.on('connection', (client) => {
     // Accepts when a client deletes existing todo
     client.on('delete', (d) => {
 
-        // Determine which todo to delete
-        const index = d.index;
-
-        // If stored "DB" exists (anything but initial Todos) - use it
-        if (d.history) {
-            DB = d.history;
-        }
-
-        // Remove the specified todo
-        DB.splice(index, 1);
-
-        // Send deleted todo index to client
-        // deleteTodos(index);
-        modifyTodos(index);
+        changeState(d, 'delete');
 
     });
 
@@ -127,40 +148,14 @@ socket.on('connection', (client) => {
     // Accepts when client completes existing todo
     client.on('complete', (d) => {
 
-        // Determing which todo to complete
-        const index = d.index;
-
-        // If stored "DB" exists - use it
-        if (d.history) {
-            DB = d.history;
-        }
-
-        // Create completed Todo
-        const todo = new Todo(DB[index].title);
-        DB[index] = todo.completed();
-
-        // Send compelted todo index to client
-        modifyTodos(index);
+        changeState(d, 'complete');
 
     });
 
     // Accepts when client marks existing completed todo as not completed
     client.on('uncomplete', (d) => {
 
-        // Determine which todo to uncomplete
-        const index = d.index;
-
-        // If stored "DB" exists - use it
-        if (d.history) {
-            DB = d.history;
-        }
-
-        // Create uncomplete Todo
-        const todo = new Todo(DB[index].title);
-        DB[index] = todo.uncompleted();
-
-        // Send uncompleted todo index to client
-        modifyTodos(index);
+        changeState(d, 'uncomplete');
 
     });
 
