@@ -10,7 +10,9 @@
 const express = require('express');
 const app = express();
 const server = require('http').Server(app);
-const socket = require('socket.io')(server);
+const socket = require('socket.io')(server, {
+    allowEIO3: true
+});
 const firstTodos = require('./data');
 const Todo = require('./todo');
 const public = `${__dirname}/root`;
