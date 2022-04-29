@@ -11,10 +11,12 @@ The goals of this project were:
 - [x] Mark all TODOs as complete.
 - [x] Option to delete all TODOs.
 - [x] Clean, minimal, responsive styling.
-- [ ] Option for dark mode.
-- [ ] Generally bug free.
+- [ ] Option to manually toggle between light and dark modes.
+- [x] System synced dark mode.
+- [x] Generally bug free.
 - [x] Should treat different browser windows as different clients/users.
-- [ ] Cache data so TODOs are kept when connection is borked.
+- [x] Cache data so TODOs are kept when connection is borked.
+- [ ] Notify when disconnected.
 - [ ] Deploy app.
 
 ## Set Up

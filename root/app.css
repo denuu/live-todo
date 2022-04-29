@@ -6,17 +6,36 @@
 ██   ██ ██      ██          ███████    ██       ██    ███████ ███████ ███████
 */
 
+:root {
+    --bg-color: #f8f8f8;
+    --bg-accent: #fff;
+    --bg-todo: #fff;
+    --text-color: #202020;
+    --color-accent: #febe2d;
+    --color-interact: #24d3eb;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-color: #252525;
+        --bg-accent: #151515;
+        --bg-todo: #303030;
+        --text-color: #dadada;
+    }
+}
+
 html, body {
     padding: 0;
     margin: 0;
-    background: #F8F8F8;
-    background: -webkit-linear-gradient(left top, #ffffff, #F8F8F8);
+    background: var(--bg-color);
+    background: -webkit-linear-gradient(left top, var(--bg-accent), var(--bg-color));
     font-family: 'Montserrat', sans-serif;
     overflow-x: hidden;
     height: 100%;
 }
 
 h1 {
+    color: var(--text-color);
     font-size: 2em;
     font-weight: 700;
     padding: 0;
@@ -25,7 +44,7 @@ h1 {
 
 h4 {
     font-size: 0.9em;
-    color: grey;
+    color: var(--text-color);
     font-weight: 500;
     padding: 0;
     margin: 2px;
@@ -56,7 +75,7 @@ h4 {
 }
 
 #user-count {
-    color: grey;
+    color: var(--text-color);
     position: fixed;
     top: 0.5em;
     right: 1em;
@@ -85,10 +104,10 @@ h4 {
     bottom: 0;
     width: 100vw;
     height: 70px;
-    background: #ffffff;
+    background: var(--bg-accent);
     text-align: center;
     vertical-align: middle;
-    box-shadow: rgba(0,0,0,0.5) 0 -3px 5px -4px;
+    box-shadow: rgba(0,0,0,0.5) 0 -3px 5px -4px; /* TODO: change to a glow for dark theme? */
 }
 
 #todo-input {
@@ -96,30 +115,38 @@ h4 {
     width: calc(70vw - 2em);
     font-size: 1em;
     font-weight: 500;
-    background: #F8F8F8;
-    border: 1px solid #ffffff;
+    background: var(--bg-color);
+    border: none;
+    box-shadow: inset var(--text-color) 0 0 0 1px;
     border-radius: 4px;
     padding: 0 10px 0 10px;
+
+}
+
+@media (prefers-color-scheme: dark) {
+    #todo-input {
+        box-shadow: inset var(--text-color) 0 0 0 1px;
+    }
 }
 
 #todo-input:focus {
     outline: none;
-    border: 1px solid #24D3EB;
+    box-shadow: inset var(--color-interact) 0 0 0 1px;
 }
 
 #make {
-    background: #24D3EB;
+    background: var(--color-interact);
     width: 50px;
     height: 50px;
     border-radius: 3px;
     font-size: 1.2em;
-    color: white;
+    color: var(--bg-accent);
     border: none;
     cursor: pointer;
 }
 
 #make:hover {
-    background: #FEBE2D;
+    background: var(--color-accent);
     transition: background 0.3s ease;
 }
 
@@ -134,8 +161,8 @@ h4 {
 }
 
 #user-toaster {
-    background: #24D3EB;
-    color: #ffffff;
+    background: var(--color-interact);
+    color: var(--bg-accent);
     border-radius: 3px;
     padding: 0.5em;
     position: absolute;
@@ -177,7 +204,6 @@ h4 {
 }
 
 #todo-list {
-    /*text-align: center;*/
     margin-left: calc(25vw - 2em);
     list-style: none;
     border: 0;
@@ -201,12 +227,19 @@ h4 {
     padding: 1em;
     height: 50px;
     width: calc(100% - 2em);
-    background: white;
-    box-shadow: grey 0 1px 5px -1px;
+    background: var(--bg-todo);
+    box-shadow: var(--text-color) 0 1px 3px -1px;
     border-radius: 3px;
 }
 
+@media (prefers-color-scheme: dark) {
+    #todo-list li {
+        box-shadow: var(--color-accent) 0 0 0 1px;
+    }
+}
+
 #todo-list p {
+    color: var(--text-color);
     display: inline-block;
     font-size: 1em;
 }
@@ -223,15 +256,15 @@ h4 {
     background: none;
     color: black;
     text-align: center;
-    border-bottom: 2px #FEBE2D solid;
-    color: grey;
+    border-bottom: 2px var(--color-accent) solid;
+    color: var(--text-color);
     margin: 0 1em 0 1em;
     font-size: 0.8em;
     cursor: pointer;
 }
 
 .text-btn:hover {
-    color: #FEBE2D;
+    color: var(--color-accent);
     transition: color 0.3s ease;
 }
 
@@ -251,16 +284,16 @@ h4 {
 }
 
 .btn-check {
-    background: white;
-    color: grey;
-    border: 3px grey solid;
+    background: var(--bg-accent);
+    color: var(--text-color);
+    border: 3px var(--text-color) solid;
     border-radius: 15px;
     margin-left: 1em;
     margin-right: 1em;
 }
 .btn-check:hover {
     transition: border 0.3s ease;
-    border: 3px #24D3EB solid;
+    border: 3px var(--color-interact) solid;
 }
 
 .check {
@@ -276,7 +309,7 @@ h4 {
 
 .btn-delete {
     background: transparent;
-    color: grey;
+    color: var(--text-color);
     border: none;
     margin-left: 1em;
     margin-right: 1em;
@@ -309,9 +342,9 @@ h4 {
 }
 
 .completed .btn-check {
-    background: #24D3EB;
-    border: 3px #24D3EB solid;
-    color: white;
+    background: var(--color-interact);
+    border: 3px var(--color-interact) solid;
+    color: var(--bg-accent);
 }
 
 .completed .check {
