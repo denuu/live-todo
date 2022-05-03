@@ -8,6 +8,10 @@
     "test": "npm test",
     "start": "node server.js"
   },
+  "engines": {
+    "node": "18.x",
+    "npm": "~8.6.0"
+  },
   "repository": {
     "type": "git",
     "url": ""

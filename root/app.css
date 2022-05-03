@@ -10,9 +10,11 @@
     --bg-color: #f8f8f8;
     --bg-accent: #fff;
     --bg-todo: #fff;
-    --text-color: #202020;
+    --color-black: #202020;
+    --color-text: var(--color-black);
     --color-accent: #febe2d;
     --color-interact: #24d3eb;
+    --color-selected: #e6ffe5;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -20,7 +22,8 @@
         --bg-color: #252525;
         --bg-accent: #151515;
         --bg-todo: #303030;
-        --text-color: #f8f8f8;
+        --color-text: #f8f8f8;
+        --color-selected: #b3f6b0;
     }
 }
 
@@ -35,7 +38,7 @@ html, body {
 }
 
 h1 {
-    color: var(--text-color);
+    color: var(--color-text);
     font-size: 2em;
     font-weight: 700;
     padding: 0;
@@ -44,7 +47,7 @@ h1 {
 
 h4 {
     font-size: 0.9em;
-    color: var(--text-color);
+    color: var(--color-text);
     font-weight: 500;
     padding: 0;
     margin: 2px;
@@ -75,7 +78,7 @@ h4 {
 }
 
 #user-count {
-    color: var(--text-color);
+    color: var(--color-text);
     position: fixed;
     top: 0.5em;
     right: 1em;
@@ -117,7 +120,7 @@ h4 {
     font-weight: 500;
     background: var(--bg-color);
     border: none;
-    box-shadow: inset var(--text-color) 0 0 0 1px;
+    box-shadow: inset var(--color-text) 0 0 0 1px;
     border-radius: 4px;
     padding: 0 10px 0 10px;
 
@@ -125,7 +128,7 @@ h4 {
 
 @media (prefers-color-scheme: dark) {
     #todo-input {
-        box-shadow: inset var(--text-color) 0 0 0 1px;
+        box-shadow: inset var(--color-text) 0 0 0 1px;
     }
 }
 
@@ -228,7 +231,7 @@ h4 {
     height: 50px;
     width: calc(100% - 2em);
     background: var(--bg-todo);
-    box-shadow: var(--text-color) 0 1px 3px -1px;
+    box-shadow: var(--color-text) 0 1px 3px -1px;
     border-radius: 3px;
 }
 
@@ -239,9 +242,13 @@ h4 {
 }
 
 #todo-list p {
-    color: var(--text-color);
+    color: var(--color-text);
     display: inline-block;
     font-size: 1em;
+}
+
+#todo-list .completed p {
+    color: var(--color-black);
 }
 
 .text-buttons {
@@ -257,7 +264,7 @@ h4 {
     color: black;
     text-align: center;
     border-bottom: 2px var(--color-accent) solid;
-    color: var(--text-color);
+    color: var(--color-text);
     margin: 0 1em 0 1em;
     font-size: 0.8em;
     cursor: pointer;
@@ -285,8 +292,8 @@ h4 {
 
 .btn-check {
     background: var(--bg-accent);
-    color: var(--text-color);
-    border: 3px var(--text-color) solid;
+    color: var(--color-text);
+    border: 3px var(--color-text) solid;
     border-radius: 15px;
     margin-left: 1em;
     margin-right: 1em;
@@ -309,7 +316,7 @@ h4 {
 
 .btn-delete {
     background: transparent;
-    color: var(--text-color);
+    color: var(--color-text);
     border: none;
     margin-left: 1em;
     margin-right: 1em;
@@ -337,8 +344,8 @@ h4 {
 ███████    ██    ██   ██    ██    ███████ ███████
 */
 
-.completed {
-    background: #E6FFE5 !important;
+#todo-list li.completed {
+    background: var(--color-selected) !important;
 }
 
 .completed .btn-check {
