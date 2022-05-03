@@ -17,7 +17,7 @@ The goals of this project were:
 - [x] Should treat different browser windows as different clients/users.
 - [x] Cache data so TODOs are kept when connection is borked.
 - [ ] Notify when disconnected.
-- [ ] Deploy app.
+- [ ] Deploy app via paid app plan on digitalocean.
 
 ## Set Up
 
